@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+    <title>Обчислення ряду</title>
+</head>
+<body>
+<h2>Обчислення ряду</h2>
+<p:growl id="messages" showDetail="true" sticky="true" />
+
+<p:panel header="Вхідні дані">
+    <h:form>
+        <p:outputLabel for="x" value="Введіть x (|x| < 1):" />
+        <p:inputText id="x" value="#{calculationController.x}" />
+        <br/><br/>
+
+        <p:outputLabel for="n" value="Введіть кількість доданків n:" />
+        <p:spinner id="n" value="#{calculationController.n}" min="1" max="100" />
+        <br/><br/>
+
+        <p:outputLabel for="e1" value="Введіть перший поріг e1:" />
+        <p:inputText id="e1" value="#{calculationController.e1}" />
+        <br/><br/>
+
+        <p:outputLabel for="e2" value="Введіть другий поріг e2:" />
+        <p:inputText id="e2" value="#{calculationController.e2}" />
+        <br/><br/>
+
+        <p:commandButton value="Обчислити" action="#{calculationController.calculate}">
+            <p:ajax update="results messages" />
+        </p:commandButton>
+    </h:form>
+</p:panel>
+
+<p:panel header="Результати" id="results">
+    <p:outputLabel value="Сума перших n доданків: #{calculationController.sumN}" rendered="#{not empty calculationController.sumN}" />
+    <br/>
+    <p:outputLabel value="Сума доданків, більших за e1: #{calculationController.sumE1}" rendered="#{not empty calculationController.sumE1}" />
+    <br/>
+    <p:outputLabel value="Сума доданків, більших за e2: #{calculationController.sumE2}" rendered="#{not empty calculationController.sumE2}" />
+    <br/>
+    <p:outputLabel value="Точне значення: #{calculationController.exact}" rendered="#{not empty calculationController.exact}" />
+</p:panel>
+</body>
+</html>

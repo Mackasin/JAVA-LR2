@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+   <title>Табулювання функції</title>
+</head>
+<body>
+<h2>Табулювання функції f(x) = cot(ln(x))</h2>
+<p:growl id="messages" showDetail="true" sticky="true" />
+
+<p:panel header="Вхідні дані">
+   <h:form>
+      <p:outputLabel for="a" value="Введіть a:" />
+      <p:inputText id="a" value="#{tabulationController.a}" />
+      <br/><br/>
+
+      <p:outputLabel for="b" value="Введіть b:" />
+      <p:inputText id="b" value="#{tabulationController.b}" />
+      <br/><br/>
+
+      <p:outputLabel for="h" value="Введіть крок h:" />
+      <p:spinner id="h" value="#{tabulationController.h}" stepFactor="0.1" min="0.1" />
+      <br/><br/>
+
+      <p:commandButton value="Табулювати" action="#{tabulationController.tabulate}">
+         <p:ajax update="results messages" />
+      </p:commandButton>
+   </h:form>
+</p:panel>
+
+<p:panel header="Таблиця значень" id="results">
+   <p:dataTable value="#{tabulationController.table}" var="row" rendered="#{not empty tabulationController.table}">
+      <p:column headerText="x">
+         <h:outputText value="#{row.x}" />
+      </p:column>
+      <p:column headerText="f(x)">
+         <h:outputText value="#{row.fx}" />
+      </p:column>
+   </p:dataTable>
+</p:panel>
+</body>
+</html>

@@ -1,47 +1,45 @@
 package com.lr2.lr2webapp.controller;
 
 import com.lr2.lr2webapp.logic.CalculationModel;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.faces.bean.ManagedBean;
+import jakarta.faces.bean.RequestScoped;
 
-import java.io.IOException;
+@ManagedBean(name = "tabulationController")
+@RequestScoped
+public class TabulationController {
 
-@WebServlet("/tabulate")
-public class TabulationController extends HttpServlet {
+    private double a;
+    private double b;
+    private double h;
+    private String error;
+    private String table;
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void tabulate() {
         try {
-            // Отримуємо параметри з форми
-            double a = Double.parseDouble(request.getParameter("a"));
-            double b = Double.parseDouble(request.getParameter("b"));
-            double h = Double.parseDouble(request.getParameter("h"));
-
-            // Перевірка коректності значень
             if (a >= b) {
-                request.setAttribute("error", "a повинно бути менше b!");
-                request.getRequestDispatcher("/tabulate.jsp").forward(request, response);
+                error = "a повинно бути менше b!";
                 return;
             }
             if (h <= 0) {
-                request.setAttribute("error", "Крок h має бути додатнім числом!");
-                request.getRequestDispatcher("/tabulate.jsp").forward(request, response);
+                error = "Крок h має бути додатнім числом!";
                 return;
             }
 
-            // Обчислюємо табуляцію
-            String table = CalculationModel.tabulate(a, b, h);
-
-            // Передаємо результат на JSP сторінку
-            request.setAttribute("table", table);
-            request.getRequestDispatcher("/tabulate.jsp").forward(request, response);
-
+            table = CalculationModel.tabulate(a, b, h);
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "Невірний формат введених даних!");
-            request.getRequestDispatcher("/tabulate.jsp").forward(request, response);
+            error = "Невірний формат введених даних!";
         }
     }
+
+    // Гетери та сетери
+    public double getA() { return a; }
+    public void setA(double a) { this.a = a; }
+    public double getB() { return b; }
+    public void setB(double b) { this.b = b; }
+    public double getH() { return h; }
+    public void setH(double h) { this.h = h; }
+    public String getError() { return error; }
+    public void setError(String error) { this.error = error; }
+    public String getTable() { return table; }
+    public void setTable(String table) { this.table = table; }
 }

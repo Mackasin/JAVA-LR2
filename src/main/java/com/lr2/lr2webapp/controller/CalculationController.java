@@ -1,47 +1,52 @@
 package com.lr2.lr2webapp.controller;
 
 import com.lr2.lr2webapp.logic.CalculationModel;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.faces.bean.ManagedBean;
+import jakarta.faces.bean.RequestScoped;
 
-import java.io.IOException;
+@ManagedBean(name = "calculationController")
+@RequestScoped
+public class CalculationController {
 
-@WebServlet("/")
-public class CalculationController extends HttpServlet {
+    private double x;
+    private int n;
+    private double e1;
+    private double e2;
+    private String error;
+    private Double sumN;
+    private Double sumE1;
+    private Double sumE2;
+    private Double exact;
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void calculate() {
         try {
-            double x = Double.parseDouble(request.getParameter("x"));
-            int n = Integer.parseInt(request.getParameter("n"));
-            double e1 = Double.parseDouble(request.getParameter("e1"));
-            double e2 = Double.parseDouble(request.getParameter("e2"));
-
             if (Math.abs(x) >= 1) {
-                request.setAttribute("error", "x має бути в межах (-1, 1)!");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                error = "x має бути в межах (-1, 1)!";
                 return;
             }
 
-
-            double sumN = CalculationModel.approximateSum(x, n);
-            double sumE1 = CalculationModel.sumWithEpsilon(x, e1);
-            double sumE2 = CalculationModel.sumWithEpsilon(x, e2);
-            double exact = CalculationModel.exactValue(x);
-
-
-            request.setAttribute("sumN", sumN);
-            request.setAttribute("sumE1", sumE1);
-            request.setAttribute("sumE2", sumE2);
-            request.setAttribute("exact", exact);
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-
+            sumN = CalculationModel.approximateSum(x, n);
+            sumE1 = CalculationModel.sumWithEpsilon(x, e1);
+            sumE2 = CalculationModel.sumWithEpsilon(x, e2);
+            exact = CalculationModel.exactValue(x);
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "Невірний формат введених даних!");
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            error = "Невірний формат введених даних!";
         }
     }
+
+    // Гетери та сетери
+    public double getX() { return x; }
+    public void setX(double x) { this.x = x; }
+    public int getN() { return n; }
+    public void setN(int n) { this.n = n; }
+    public double getE1() { return e1; }
+    public void setE1(double e1) { this.e1 = e1; }
+    public double getE2() { return e2; }
+    public void setE2(double e2) { this.e2 = e2; }
+    public String getError() { return error; }
+    public void setError(String error) { this.error = error; }
+    public Double getSumN() { return sumN; }
+    public Double getSumE1() { return sumE1; }
+    public Double getSumE2() { return sumE2; }
+    public Double getExact() { return exact; }
 }
